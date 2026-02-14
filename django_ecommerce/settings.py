@@ -171,9 +171,9 @@ MESSAGE_TAGS = {
 }
 
 # Login/Logout redirects
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'shop:home'
+LOGOUT_REDIRECT_URL = 'shop:home'
+LOGIN_URL = 'accounts:login'
 
 # Session settings
 SESSION_COOKIE_AGE = 86400  # 24 hours

@@ -27,7 +27,7 @@ class CustomLoginView(LoginView):
 def register(request):
     """User Registration View"""
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('shop:home')
     
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -35,7 +35,7 @@ def register(request):
             user = form.save()
             messages.success(request, f'Account created successfully! Welcome, {user.username}!')
             login(request, user)
-            return redirect('home')
+            return redirect('shop:home')
     else:
         form = UserRegisterForm()
     
