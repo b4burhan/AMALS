@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-light py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if category %}{{ category.name }}{% else %}Blog{% endif %}
+                </li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 fw-bold">
+            {% if category %}{{ category.name }} Articles{% else %}Our Blog{% endif %}
+        </h1>
+        <p class="text-muted">{% if category %}{{ category.description|default:"Browse articles in this category" }}{% else %}Discover insights, tips, and stories{% endif %}</p>
+    </div>
+</section>
+
+<!-- Featured Posts -->
+{% if featured_posts and not category and not query %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4">Featured Articles</h2>
+        <div class="row g-4">
+            {% for post in featured_posts %}
+            <div class="col-lg-4">
+                <div class="card blog-card h-100">
+                    <div class="blog-image-wrapper">
+                        {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                        {% else %}
+                        <div class="blog-placeholder">
+                            <i class="bi bi-journal-text display-4"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">{{ post.category.name }}</span>
+                        <h5 class="card-title">{{ post.title|truncatechars:50 }}</h5>
+                        <p class="card-text text-muted">{{ post.excerpt|truncatechars:100|default:post.content|truncatechars:100|striptags }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="bi bi-person me-1"></i>{{ post.author.username }}
+                            </small>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>{{ post.created_at|date:"M d, Y" }}
+                            </small>
+                        </div>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm w-100 mt-2">Read More</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Blog Posts -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <!-- Search -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="mb-3">Search</h6>
+                        <form action="{% url 'blog:post_list' %}" method="get">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="Search articles..." value="{{ query|default:'' }}">
+                                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Categories -->
+                <div class="card mb-4">
+                    <div class="card-header bg-white">
+                        <h6 class="mb-0">Categories</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="{% url 'blog:post_list' %}" class="{% if not category %}fw-bold text-primary{% else %}text-muted{% endif %} text-decoration-none d-flex justify-content-between">
+                                    All Categories
+                                    <span class="badge bg-secondary">{{ posts.paginator.count|default:0 }}</span>
+                                </a>
+                            </li>
+                            {% for cat in categories %}
+                            <li class="mb-2">
+                                <a href="{% url 'blog:post_list_by_category' cat.slug %}" class="{% if category == cat %}fw-bold text-primary{% else %}text-muted{% endif %} text-decoration-none d-flex justify-content-between">
+                                    {{ cat.name }}
+                                    <span class="badge bg-secondary">{{ cat.blog_posts.count }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Submit Blog -->
+                {% if user.is_authenticated %}
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 class="mb-3">Want to Write?</h6>
+                        <p class="text-muted small">Share your knowledge with our community.</p>
+                        <a href="{% url 'blog:submit_blog' %}" class="btn btn-primary btn-sm w-100">Submit Article</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Posts Grid -->
+            <div class="col-lg-9">
+                <!-- Search Results Info -->
+                {% if query %}
+                <div class="alert alert-info">
+                    <i class="bi bi-search me-2"></i>Search results for: <strong>"{{ query }}"</strong>
+                    <a href="{% url 'blog:post_list' %}" class="float-end text-decoration-none">Clear Search</a>
+                </div>
+                {% endif %}
+                
+                <div class="row g-4">
+                    {% for post in posts %}
+                    <div class="col-md-6">
+                        <div class="card blog-card h-100">
+                            <div class="blog-image-wrapper">
+                                {% if post.featured_image %}
+                                <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                                {% else %}
+                                <div class="blog-placeholder">
+                                    <i class="bi bi-journal-text display-4"></i>
+                                </div>
+                                {% endif %}
+                                <div class="blog-overlay">
+                                    <span class="badge bg-primary">{{ post.category.name }}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title|truncatechars:50 }}</h5>
+                                <p class="card-text text-muted">{{ post.excerpt|truncatechars:100|default:post.content|truncatechars:100|striptags }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">
+                                        <i class="bi bi-person me-1"></i>{{ post.author.username }}
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>{{ post.created_at|date:"M d, Y" }}
+                                    </small>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-eye me-1"></i>{{ post.views }} views
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="bi bi-chat me-1"></i>{{ post.get_comments_count }} comments
+                                    </small>
+                                </div>
+                                <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary btn-sm w-100 mt-2">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-journal-x display-1 text-muted"></i>
+                        <h4 class="mt-3">No articles found</h4>
+                        <p class="text-muted">Try adjusting your search or filter criteria.</p>
+                        <a href="{% url 'blog:post_list' %}" class="btn btn-primary">View All Articles</a>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if posts.has_other_pages %}
+                <nav aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if posts.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in posts.paginator.page_range %}
+                            {% if posts.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block meta_description %}{{ post.excerpt|default:post.content|truncatechars:160|striptags }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<section class="bg-light py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'blog:post_list' %}">Blog</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'blog:post_list_by_category' post.category.slug %}">{{ post.category.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatechars:30 }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Article Header -->
+<section class="py-4">
+    <div class="container">
+        <span class="badge bg-primary mb-2">{{ post.category.name }}</span>
+        <h1 class="fw-bold mb-3">{{ post.title }}</h1>
+        <div class="d-flex flex-wrap gap-3 text-muted mb-4">
+            <span><i class="bi bi-person me-1"></i>{{ post.author.username }}</span>
+            <span><i class="bi bi-calendar me-1"></i>{{ post.created_at|date:"F d, Y" }}</span>
+            <span><i class="bi bi-eye me-1"></i>{{ post.views }} views</span>
+            <span><i class="bi bi-chat me-1"></i>{{ post.get_comments_count }} comments</span>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Image -->
+{% if post.featured_image %}
+<section class="mb-4">
+    <div class="container">
+        <img src="{{ post.featured_image.url }}" class="img-fluid rounded shadow w-100" alt="{{ post.title }}" style="max-height: 500px; object-fit: cover;">
+    </div>
+</section>
+{% endif %}
+
+<!-- Article Content -->
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <article class="blog-content">
+                    {{ post.content|safe }}
+                </article>
+                
+                <!-- Share Buttons -->
+                <div class="mt-5 pt-4 border-top">
+                    <h6 class="mb-3">Share this article:</h6>
+                    <div class="d-flex gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="bi bi-facebook me-1"></i>Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ post.title }}" target="_blank" class="btn btn-info btn-sm text-white">
+                            <i class="bi bi-twitter me-1"></i>Twitter
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" class="btn btn-secondary btn-sm">
+                            <i class="bi bi-linkedin me-1"></i>LinkedIn
+                        </a>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard!');">
+                            <i class="bi bi-link-45deg me-1"></i>Copy Link
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="mt-5 pt-4 border-top">
+                    <h4 class="mb-4">Comments ({{ post.get_comments_count }})</h4>
+                    
+                    <!-- Comment Form -->
+                    {% if user.is_authenticated %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="mb-3">Leave a Comment</h6>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    {{ form.content }}
+                                </div>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>Please <a href="{% url 'accounts:login' %}?next={{ request.path }}">login</a> to leave a comment.
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Comments List -->
+                    {% if comments %}
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex align-items-center">
+                                        <div class="comment-avatar me-3">
+                                            <i class="bi bi-person-circle fs-2"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">{{ comment.user.username }}</h6>
+                                            <small class="text-muted">{{ comment.created_at|date:"F d, Y \\a\\t h:i A" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="card-text mt-3 mb-0">{{ comment.content }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-chat-square-text display-4 text-muted"></i>
+                        <p class="text-muted mt-2">No comments yet. Be the first to comment!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Author Info -->
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <div class="author-avatar mb-3">
+                            <i class="bi bi-person-circle display-1"></i>
+                        </div>
+                        <h5>{{ post.author.username }}</h5>
+                        <p class="text-muted">Author</p>
+                        <a href="{% url 'blog:post_list' %}" class="btn btn-outline-primary btn-sm">View All Articles</a>
+                    </div>
+                </div>
+                
+                <!-- Related Posts -->
+                {% if related_posts %}
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h6 class="mb-0">Related Articles</h6>
+                    </div>
+                    <div class="card-body">
+                        {% for related in related_posts %}
+                        <div class="d-flex mb-3 {% if not forloop.last %}pb-3 border-bottom{% endif %}">
+                            {% if related.featured_image %}
+                            <img src="{{ related.featured_image.url }}" class="rounded me-3" alt="{{ related.title }}" width="80" height="60" style="object-fit: cover;">
+                            {% else %}
+                            <div class="related-post-placeholder rounded me-3 d-flex align-items-center justify-content-center bg-light" style="width: 80px; height: 60px;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-1"><a href="{{ related.get_absolute_url }}" class="text-decoration-none">{{ related.title|truncatechars:40 }}</a></h6>
+                                <small class="text-muted">{{ related.created_at|date:"M d, Y" }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

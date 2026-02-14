@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">About Us</h1>
+        <p class="lead">Learn more about our story and mission</p>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <img src="{% static 'images/about-us.jpg' %}" alt="About Us" class="img-fluid rounded shadow" onerror="this.src='https://via.placeholder.com/600x400?text=About+Us'">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Our Story</h2>
+                <p class="lead">DjangoShop was founded with a simple mission: to provide high-quality products and valuable content to our customers.</p>
+                <p>We believe in the power of e-commerce combined with knowledge sharing. Our platform offers not just a shopping experience, but also a community where people can learn, share, and grow together.</p>
+                <p>With years of experience in the industry, we've built a reputation for reliability, quality, and exceptional customer service.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-primary">10K+</h3>
+                        <p class="text-muted">Happy Customers</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-primary">500+</h3>
+                        <p class="text-muted">Products</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <h3 class="fw-bold text-primary">50+</h3>
+                        <p class="text-muted">Blog Articles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Values</h2>
+            <p class="text-muted">What drives us every day</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-award display-3 text-primary mb-3"></i>
+                        <h4>Quality First</h4>
+                        <p class="text-muted">We never compromise on quality. Every product in our store is carefully selected and tested.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-heart display-3 text-primary mb-3"></i>
+                        <h4>Customer Focus</h4>
+                        <p class="text-muted">Our customers are at the heart of everything we do. Your satisfaction is our priority.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-lightbulb display-3 text-primary mb-3"></i>
+                        <h4>Innovation</h4>
+                        <p class="text-muted">We constantly evolve and improve to bring you the best shopping experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Our Team</h2>
+            <p class="text-muted">Meet the people behind DjangoShop</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <div class="team-avatar mb-3">
+                            <i class="bi bi-person-circle display-1 text-primary"></i>
+                        </div>
+                        <h5>John Doe</h5>
+                        <p class="text-primary">Founder & CEO</p>
+                        <p class="text-muted">Visionary leader with 15+ years of experience in e-commerce.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <div class="team-avatar mb-3">
+                            <i class="bi bi-person-circle display-1 text-primary"></i>
+                        </div>
+                        <h5>Jane Smith</h5>
+                        <p class="text-primary">Head of Operations</p>
+                        <p class="text-muted">Ensuring smooth operations and exceptional customer experience.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body p-4">
+                        <div class="team-avatar mb-3">
+                            <i class="bi bi-person-circle display-1 text-primary"></i>
+                        </div>
+                        <h5>Mike Johnson</h5>
+                        <p class="text-primary">Content Manager</p>
+                        <p class="text-muted">Curating valuable content for our blog and community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Join Our Community?</h2>
+        <p class="lead mb-4">Start shopping or explore our blog today.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-lg">Shop Now</a>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-outline-light btn-lg">Read Blog</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

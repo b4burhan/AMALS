@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmation{% endblock %}
+
+{% block content %}
+<!-- Order Confirmation -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success display-1"></i>
+                </div>
+                <h1 class="fw-bold mb-3">Thank You for Your Order!</h1>
+                <p class="lead text-muted mb-4">Your order has been placed successfully. We'll send you a confirmation email shortly.</p>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3">Order Details</h5>
+                        <div class="row">
+                            <div class="col-md-6 text-md-start">
+                                <p class="mb-1"><strong>Order Number:</strong></p>
+                                <p class="h5 text-primary">{{ order.order_number }}</p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <p class="mb-1"><strong>Order Date:</strong></p>
+                                <p>{{ order.created_at|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 text-md-start">
+                                <p class="mb-1"><strong>Total Amount:</strong></p>
+                                <p class="h5">${{ order.total_amount }}</p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <p class="mb-1"><strong>Status:</strong></p>
+                                <span class="badge bg-warning">{{ order.get_order_status_display }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-primary">
+                        <i class="bi bi-eye me-2"></i>View Order Details
+                    </a>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-shop me-2"></i>Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Order Items -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h4 class="mb-4">Order Items</h4>
+        <div class="row">
+            {% for item in order.items.all %}
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-3" width="80" height="80" style="object-fit: cover;">
+                        {% else %}
+                        <div class="rounded me-3 d-flex align-items-center justify-content-center bg-light" style="width: 80px; height: 80px;">
+                            <i class="bi bi-image text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h6 class="mb-1">{{ item.product.name }}</h6>
+                            <p class="mb-1 text-muted">Qty: {{ item.quantity }}</p>
+                            <p class="mb-0 fw-bold">${{ item.get_total_price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

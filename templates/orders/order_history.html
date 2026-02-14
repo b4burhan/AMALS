@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-light py-4">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'shop:home' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Order History</li>
+            </ol>
+        </nav>
+        <h1 class="mt-3 fw-bold">My Orders</h1>
+        <p class="text-muted">View and track your orders</p>
+    </div>
+</section>
+
+<!-- Orders List -->
+<section class="py-5">
+    <div class="container">
+        {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><strong>{{ order.order_number }}</strong></td>
+                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>
+                            {% if order.order_status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% elif order.order_status == 'processing' %}
+                            <span class="badge bg-info">Processing</span>
+                            {% elif order.order_status == 'shipped' %}
+                            <span class="badge bg-primary">Shipped</span>
+                            {% elif order.order_status == 'delivered' %}
+                            <span class="badge bg-success">Delivered</span>
+                            {% else %}
+                            <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if order.payment_status == 'completed' %}
+                            <span class="badge bg-success">Paid</span>
+                            {% elif order.payment_status == 'pending' %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% else %}
+                            <span class="badge bg-danger">Failed</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye me-1"></i>View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-bag-x display-1 text-muted"></i>
+            <h4 class="mt-3">No Orders Yet</h4>
+            <p class="text-muted">You haven't placed any orders yet.</p>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-shop me-2"></i>Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
