@@ -74,6 +74,19 @@ class BlogSubmissionAdmin(admin.ModelAdmin):
             submission.approve(request.user)
         self.message_user(request, f'{queryset.filter(status="pending").count()} submissions approved.')
     approve_submissions.short_description = "Approve selected submissions"
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            old_obj = BlogSubmission.objects.get(pk=obj.pk)
+
+            # If status changed to approved
+            if old_obj.status != 'approved' and obj.status == 'approved':
+                super().save_model(request, obj, form, change)
+                obj.approve(request.user)
+                return
+
+        super().save_model(request, obj, form, change)
+
     
     def reject_submissions(self, request, queryset):
         for submission in queryset.filter(status='pending'):

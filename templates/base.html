@@ -137,7 +137,7 @@
                 <!-- Company Info -->
                 <div class="col-lg-3 col-md-6">
                     <h5 class="mb-3"><i class="bi bi-shop me-2"></i>DjangoShop</h5>
-                    <p class="text-muted">Your one-stop destination for quality products and insightful blogs. Shop with
+                    <p class="">Your one-stop destination for quality products and insightful blogs. Shop with
                         confidence and stay informed.</p>
                     <div class="social-links">
                         <a href="#" class="text-light me-3"><i class="bi bi-facebook fs-5"></i></a>
@@ -151,9 +151,9 @@
                 <div class="col-lg-2 col-md-6">
                     <h6 class="mb-3">Company</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'about' %}" class="text-muted text-decoration-none">About Us</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Careers</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Press</a></li>
+                        <li><a href="{% url 'about' %}" class=" text-decoration-none">About Us</a></li>
+                        <li><a href="#" class=" text-decoration-none">Careers</a></li>
+                        <li><a href="#" class=" text-decoration-none">Press</a></li>
                     </ul>
                 </div>
 
@@ -161,9 +161,9 @@
                 <div class="col-lg-2 col-md-6">
                     <h6 class="mb-3">Support</h6>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'contact' %}" class="text-muted text-decoration-none">Contact Us</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">FAQ</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Shipping</a></li>
+                        <li><a href="{% url 'contact' %}" class=" text-decoration-none">Contact Us</a></li>
+                        <li><a href="#" class=" text-decoration-none">FAQ</a></li>
+                        <li><a href="#" class=" text-decoration-none">Shipping</a></li>
                     </ul>
                 </div>
 
@@ -171,16 +171,16 @@
                 <div class="col-lg-2 col-md-6">
                     <h6 class="mb-3">Legal</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Terms of Service</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Cookie Policy</a></li>
+                        <li><a href="#" class=" text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class=" text-decoration-none">Terms of Service</a></li>
+                        <li><a href="#" class=" text-decoration-none">Cookie Policy</a></li>
                     </ul>
                 </div>
 
                 <!-- Newsletter -->
                 <div class="col-lg-3 col-md-6">
                     <h6 class="mb-3">Newsletter</h6>
-                    <p class="text-muted">Subscribe to get updates on new products and offers.</p>
+                    <p class="">Subscribe to get updates on new products and offers.</p>
                     <form action="{% url 'shop:newsletter_subscribe' %}" method="post">
                         {% csrf_token %}
                         <div class="input-group">
@@ -195,10 +195,10 @@
 
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0 text-muted">&copy; {% now "Y" %} DjangoShop. All rights reserved.</p>
+                    <p class="mb-0 ">&copy; {% now "Y" %} DjangoShop. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <p class="mb-0 text-muted">Made with <i class="bi bi-heart-fill text-danger"></i> using Django</p>
+                    <p class="mb-0 ">Made with <i class="bi bi-heart-fill text-danger"></i> using Django</p>
                 </div>
             </div>
         </div>

@@ -26,9 +26,12 @@ def cart_detail(request):
 
 
 @login_required
-@require_POST
+# @require_POST
 def cart_add(request, product_id):
     """Add product to cart"""
+    if request.method != "POST":
+        return redirect('cart:cart_detail')
+        
     product = get_object_or_404(Product, id=product_id, available=True)
     form = CartAddProductForm(request.POST)
     
